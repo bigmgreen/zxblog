@@ -5,7 +5,6 @@ div {
     height: 200px;
     margin: 100px auto 0;
     background-color: #654545;
-    position: relative;
     background-image: -webkit-radial-gradient(left top, #fff 5%, transparent 0, transparent 0), -webkit-radial-gradient(right top, #fff 5%, transparent 0, transparent 0), -webkit-radial-gradient(right bottom, #fff 5%, transparent 0, transparent 0), -webkit-radial-gradient(left bottom, #fff 5%, transparent 0, transparent 0);
     background-size: 200px 200px;
 }
