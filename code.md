@@ -1,3 +1,10 @@
+```json
+// vscode 扩展文件代码高亮
+"files.associations": {
+    "*.art": "html"
+}
+```
+
 ```css
 // css 凹角实现，transparent 0, transparent 0（第二个用来消除锯齿）
 div {
