@@ -2,17 +2,19 @@
 
 1. flex 布局现在已经得到了广泛使用，尤其是在移动端
 
-2. 它有很多属性，使用方式非常灵活，但是大多数情况下也只是应用到了寥寥几个属性，比如：flex-wrap、flex、align-items、align-content、align-self、justify-content 等
+2. 它有很多属性，使用方式非常灵活，但是大多数情况下也只是应用到了寥寥几个属性，比如：align-items、align-content、align-self、justify-content 等
 
 3. 固然这几个常用属性就可以帮助我们实现大多数布局效果，但是如果深入理解下其他属性的特点，你会发现，flex 还能做到更多
 
-4. 本篇文章注意讲述以下属性：
+4. 本篇文章主要讲述以下属性：
     - order
-    - flex-grow
-    - flex-shrink
-    - flex-basis
+    - flex
+        - flex-grow
+        - flex-shrink
+        - flex-basis
     - flex-flow
-    - flex-direction
+        - flex-direction
+        - flex-wrap
 
 ## 属性介绍、应用案例
 
@@ -26,15 +28,57 @@
 
     - 通过上面的案例，相信读者已经对 order 的应用场景有了判断
 
-2. flex-grow: 用数值来定义扩展比率，不可以为负值
+2. flex: 复合属性，none | <' flex-grow '> <' flex-shrink >'? || <' flex-basis '>
 
-3. flex-shrink: 
+    - flex-grow: 用数值来定义扩展比率，不可以为负值（默认值是 0）
 
-4. flex-basis: 
+        - 先看看老版的左边宽度固定，右边宽度自适应布局来说，代码如下：
+        // TODO 插入代码
 
-5. flex-flow: 
+        - 这是也一个很经典的案例，现在我们用 flex-grow 来实现它，代码如下：
+        // TODO 插入代码
 
-6. flex-direction: 
+        - 再来看一个案例，有底部导航栏的布局（导航栏固定不动，内容可以滚动），代码如下：
+        // TODO 插入代码
+
+        - 现在让我们来搭配 item-align 和 flex-flow 属性来实现它，代码如下：
+        // TODO 插入代码
+
+        - 再引申下，上中下布局（上下固定不动，中滚动）是不是也就轻而易举了，留给读者
+
+        - 我们平时设置的 `flex: 1` 其实就是设置的是 `flex-grow: 1`
+
+    - flex-shrink: 用数值来定义收缩比率，不允许负值（默认值是 1）
+
+        - 这个属性不常用，在父项空间溢出时才会发挥作用，默认值是 1，它会根据其给定的值和父元素宽度重新计算各个子项的宽度，这时显式定义的宽度就不起作用了，它的计算方式：
+
+        ```txt
+
+        ```
+
+    - flex-basis: 
+
+3. flex-flow: 复合属性，<' flex-direction '> || <' flex-wrap '>
+
+    - flex-direction：定义弹性盒子元素的排列方向
+        - row：横向从左到右排列（浏览器默认）
+        - row-reverse：对齐方式与 row 相反
+        - column：纵向从上往下排列
+        - column-reverse：对齐方式与 column 相反
+        - 以上属性的反转值不影响元素的绘制，语音和导航顺序，只改变流动方向。这与 <' writing-mode '> 和 <' direction '> 相同
+        - 这个属性单独使用就跟上面说的一样，很简单，也很好理解，主要还是和其他属性组合在一起以发挥很大的作用，读者先有个印象，我会在案例中展示具体代码
+
+    - flex-wrap：控制 flex 容器是单行或者多行
+        - nowrap：当 flex 容器为单行，flex 子项可能会溢出容器（浏览器默认）
+        - wrap：当 flex 容器为多行，flex 子项溢出的部分会被放置到新行，子项内部会发生断行
+        - wrap-reverse：反转 wrap 排列
+        - 由上面的定义可知使用了 flex 布局后，子项元素是默认排列在一行的，所以在遇到需要展示多行的情况下，这个属性是要设置为 wrap 了，用到的机会还是很多的
+
+    - 接下来让我们看看设置了 flex-flow 属性后，会出现的几种效果
+        1.
+        2. 
+        3.
+        4.
 
 ## 结语
 
