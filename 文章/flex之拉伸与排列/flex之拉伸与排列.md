@@ -24,11 +24,9 @@
 
     ```html
     <div>
-    　　<div class="main">
-            <div class="content">Main</div>
-        </div>
-    　　<div class="left">Left</div>
-    　　<div class="right">Right</div>
+      <div class="main">Main</div>
+    　<div class="left">Left</div>
+    　<div class="right">Right</div>
     </div>
     ```
 
@@ -69,7 +67,7 @@
     ```
 
     ```css
-    .content{
+    .content {
       display: flex;
     }
 
@@ -118,7 +116,7 @@
 
         ```html
         <div class="left">Left</div>
-        <div class="content">Main</div>
+        <div class="main">Main</div>
         ```
 
         ```css
@@ -128,7 +126,7 @@
           background-color: green;
         }
 
-        .content {
+        .main {
           background-color: orange;
           margin-left: 220px;
         }
@@ -137,25 +135,25 @@
         - 这是也一个很经典的案例，现在我们用 flex-grow 来实现它，代码如下：
 
         ```html
-        <div class="main">
-          <div class="content">Main</div>
+        <div class="content">
+          <div class="main">Main</div>
           <div class="left">Left</div>
         </div>
         ```
 
         ```css
-        .main{
+        .main {
+          background-color: orange;
+          flex-grow: 1;
+        }
+
+        .content {
           display: flex;
         }
 
         .left {
           width: 220px;
           background-color: green;
-        }
-
-        .content {
-          background-color: orange;
-          flex-grow: 1;
         }
         ```
 
@@ -167,7 +165,7 @@
         ```
 
         ```css
-        .main{
+        .main {
           padding-bottom: 50px;
         }
 
@@ -184,27 +182,27 @@
         - 现在让我们来搭配 flex-direction 和 flex-flow 属性来实现它，代码如下：
 
         ```html
-        <div class="main">
-          <div class="content">Main</div>
+        <div class="content">
+          <div class="main">Main</div>
           <div class="left">Left</div>
         </div>
         ```
 
         ```css
-        .main{
+        .content {
           display: flex;
           flex-direction: column;
           height: 100vh;
         }
 
-        .left {
-          background-color: green;
-        }
-
-        .content {
+        .main {
           background-color: orange;
           flex-grow: 1;
           overflow: auto;
+        }
+
+        .left {
+          background-color: green;
         }
         ```
 
