@@ -127,58 +127,153 @@
 
   ```js
   const handlers = {
-    // 触发时机是：Reflect.get(..)、. 属性运算符、[..]属性运算符
+    /**
+     * 触发方式：
+     *
+     * Reflect.get(pObj, 'a')
+     * pObj.a
+     * pObj['a']
+     */
     get(target, propKey, context) {...}
 
-    // 触发时机是：Reflect.set(..)、赋值运算符 =、目标为对象属性的解构赋值，返回一个布尔值
+    /**
+     * 触发方式：
+     *
+     * Reflect.set(pObj, 'a', 666)
+     * pObj.a = 888
+     * ({ a: pObj.a } = obj)
+     */
     set(target, propKey, value, context) {...}
 
-    // 触发时机是：Reflect.isExtensible(..) 或 Object.isExtensible(..)，返回一个布尔值
+    /**
+     * 触发方式：
+     *
+     * Reflect.isExtensible(pObj)
+     * Object.isExtensible(pObj)
+     * 
+     * returns Boolean
+     */
     isExtensible(target) {...}
 
-    // 触发时机是：Reflect.deleteProperty(..)或 delete，返回一个布尔值
+    /**
+     * 触发方式：
+     *
+     * Reflect.deleteProperty(pObj, 'a')
+     * delete pObj.a
+     * 
+     * returns Boolean
+     */
     delete(target, propKey) {...}
 
-    // 触发时机是：Reflect.getOwnPropertyDescriptor(..) 或 Object.getOwnPropertyDescriptor(..)
+    /**
+     * 触发方式：
+     *
+     * Reflect.getOwnPropertyDescriptor(pObj, 'a')
+     * Object.getOwnPropertyDescriptor(pObj, 'a')
+     * 
+     * returns Boolean
+     */
     getOwnPropertyDescriptor(target, propKey) {...}
 
-    // 触发时机是：Reflect.defineProperty(..) 或 Object.defineProperty(..)
+    /**
+     * 触发方式：
+     *
+     * Object.defineProperty(pObj, 'b', { writable: false, value: 888 })
+     * Reflect.defineProperty(pObj, 'c', { writable: false, value: 999 })
+     * 
+     */
     defineProperty(target, propKey) {...}
 
-    // 触发时机是：Reflect.getPrototypeOf(..)、Object.getPrototypeOf(..)、__proto__、Object.isPrototypeOf(..)、instanceof
+    /**
+     * 触发方式：
+     *
+     * Reflect.getPrototypeOf(pObj)
+     * Object.getPrototypeOf(pObj)
+     * pObj.__proto__
+     * Object.isPrototypeOf(pObj)
+     * pObj instanceof Object
+     * 
+     */
     getPrototypeOf(target) {...}
 
-    // 触发时机是：Reflect.setPrototypeOf(..)、Object.setPrototypeOf(..)、__proto__
+    /**
+     * 触发方式：
+     *
+     * Reflect.setPrototypeOf(pObj, { b: 1 });
+     * Object.setPrototypeOf(pObj, { c: 2 });
+     * pObj.__proto__ = { c: 66 }
+     * 
+     */
     setPrototypeOf(target, proto) {...}
 
-    // 触发时机是：Reflect.preventExtensions(..) 或 Object.preventExtensions(..)
+    /**
+     * 触发方式：
+     *
+     * Reflect.preventExtensions(pObj)
+     * Object.preventExtensions(pObj)
+     * 
+     * 注意：当调用了此函数后，对象就变成了不可扩展的，再次调用 set 会返回 false
+     * Reflect.set(pObj, 'b', 666) // false
+     */
     preventExtensions(target) {...}
 
     /**
      * 触发时机是：
      *
-     * Object.getOwnPropertyNames(..)
-     * Object.getOwnPropertySymbols(..)
-     * Object.keys(..)
-     * for...in
-     * Reflect.getOwnPropertyNames(..)
-     * Reflect.getOwnPropertySymbols(..)
-     * Reflect.ownKeys(..)
-     * JSON.stringify(..)
+     * Reflect.ownKeys(pObj)
+     * Object.getOwnPropertyNames(pObj)
+     * Object.getOwnPropertySymbols(pObj)
+     * Object.keys(pObj)
+     * for (var i in proxy) { console.log(i) }
+     * JSON.stringify(pObj)
      *
-     * 该方法返回目标对象所有自身的属性的属性名
+     * 注意：
+     *
+     * 1. 该方法返回被代理的对象所有自身属性的属性名
+     * 2. 使用Object.keys方法时，有三类属性会被ownKeys方法自动过滤：目标对象上不存在的属性、属性名为 Symbol 值、不可遍历（enumerable）的属性
      */
     ownKeys(target) {...}
 
-    // 触发时机是：Reflect.has(..)、Object.hasOwnProperty(..)、'prop' in obj
+    /**
+     * 触发方式：
+     *
+     * Reflect.has(pObj, 'a')
+     * 'a' in pObj
+     * 
+     * 注意：
+     *
+     * 1. 可以利用 has 屏蔽某些属性，从而不被 in 找到
+     * 2. 原对象不可配置或者禁止扩展，has 方法会报错
+     * 3. has 方法不判断属性是对象自身的还是继承的，因此调用 Object.hasOwnProperty 不能返回正确值
+     * 4. for...in 中的 in 运算符，has 拦截不生效
+     */
     has(target, propKey) {...}
 
-    // 如果目标是函数，触发时机是：Reflect.apply(..)、call、apply，()调用运算符
+    /**
+     * 触发方式：
+     *
+     * pObj()
+     * pObj.call()
+     * pObj.apply()
+     * Reflect.apply(pObj, thisObj, args) // pObj 目标函数，thisObj 目标上下文，args 函数的参数
+     * 
+     * 注意：被代理的对象必须是函数，否则会报错
+     */
     apply(target, object, args) {...}
 
-    // 如果目标是构造函数，触发时机是：Reflect.construct(..) 或 new
-    construct(target, args) {...}
+    /**
+     * 触发方式：
+     *
+     * new pObj()
+     * Reflect.construct(pObj, [])
+     * 
+     * 注意：被代理的对象必须是函数，且 construct 方法必须返回一个对象，否则会报错
+     */
+    construct(target, args) {..}
   }
+
+  const obj = { a: 1 }
+  const pObj = new Proxy(obj, handlers) // 创建 Proxy 实例
   ```
 
 ## 常用场景
@@ -208,6 +303,8 @@
     - 可以看到还是具有一定的局限性
 
   - `Object.defineProperty` 只能劫持对象的属性，因此要对每个对象的每个属性进行遍历，`Vue 2.x`里，是通过递归结合遍历 `data` 对象来实现对数据的监听，所以属性值也是对象的话，还需要进行深度遍历，从性能上考虑，消耗还是有点大
+
+  - [vue3 Proxy 源码实现](https://github.com/vuejs/vue-next/blob/02478b48eb0f0cb9ef00f80216e161a288c0b220/packages/reactivity/src/baseHandlers.ts#L14)
 
 ## 结语
 
